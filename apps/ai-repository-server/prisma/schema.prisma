@@ -1,0 +1,42 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Tool {
+  comments  String?
+  createdAt DateTime @default(now())
+  goal      Goal?    @relation(fields: [goalId], references: [id])
+  goalId    String?
+  id        String   @id @default(cuid())
+  isFree    Boolean?
+  name      String?
+  updatedAt DateTime @updatedAt
+  url       String?
+  validated Boolean?
+}
+
+model Goal {
+  createdAt   DateTime @default(now())
+  description String?
+  id          String   @id @default(cuid())
+  name        String?
+  tools       Tool[]
+  updatedAt   DateTime @updatedAt
+}
+
+model User {
+  createdAt DateTime @default(now())
+  email     String?  @unique
+  firstName String?
+  id        String   @id @default(cuid())
+  lastName  String?
+  password  String
+  roles     Json
+  updatedAt DateTime @updatedAt
+  username  String   @unique
+}
